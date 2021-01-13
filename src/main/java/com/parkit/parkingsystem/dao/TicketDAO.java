@@ -19,6 +19,8 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+    private DataBaseConfig dataBaseConfig2 = dataBaseConfig;
+
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
         try {
@@ -35,7 +37,7 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
-            dataBaseConfig.closeConnection(con);
+            dataBaseConfig2.closeConnection(con);
             return false;
         }
     }
