@@ -21,7 +21,7 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
 
-    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
+	public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
@@ -103,11 +103,23 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
-            if(ticketDAO.updateTicket(ticket)) {
+
+            Ticket oldTicket = ticketDAO.getOldTicket(vehicleRegNumber);
+            double newPrice = ticket.getPrice();
+            System.out.println("Avant 5%" + newPrice);
+
+           
+            if(ticketDAO.updateTicket(ticket)) {           	
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
+                fareCalculatorService.calculateFare(ticket); 
+                
+                if (oldTicket.getOutTime() != null & oldTicket.getOutTime().getTime() != ticket.getOutTime().getTime()) {
+                	newPrice = (newPrice -((newPrice * 5)/100));
+                	ticket.setPrice(newPrice);
+                	System.out.println("Aprés 5%" + newPrice);
+                }
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
