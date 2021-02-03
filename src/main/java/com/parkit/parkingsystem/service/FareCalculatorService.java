@@ -10,6 +10,8 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 
 	public void calculateFare(Ticket ticket) {
+		System.out.println(ticket.getOutTime());
+		System.out.println(ticket.getInTime());
 		if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
 			throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
 		}
