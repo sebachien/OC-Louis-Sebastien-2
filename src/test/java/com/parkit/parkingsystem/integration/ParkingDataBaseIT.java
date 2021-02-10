@@ -55,7 +55,7 @@ public class ParkingDataBaseIT {
 
 	}
 
-	/*@Test
+	@Test
 	public void testParkingACar() {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
@@ -77,11 +77,11 @@ public class ParkingDataBaseIT {
 		// the database
 		Ticket ticket = ticketDAO.getTicket("ABCDEF");
 		assertNotEquals(null, ticket.getPrice());
-
+		
 		assertNotEquals(null, ticket.getOutTime());
 	}
 
-	*/
+	
 	@Test
 	public void testParkingLotExitTwoTime() {
 		Date inTime = new Date();
