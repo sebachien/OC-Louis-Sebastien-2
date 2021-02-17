@@ -9,6 +9,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class ParkingService {
@@ -110,25 +111,39 @@ public class ParkingService {
 			Ticket oldTicket = ticketDAO.getOldTicket(vehicleRegNumber);
 			
 			ParkingSpot parkingSpot = ticket.getParkingSpot();
+			
+			DecimalFormat df = new DecimalFormat("########.00"); // Initialisation pour le reduction de decimal a 2 chiffre aprés la virgule
+			
 			parkingSpot.setAvailable(true);
 			parkingSpotDAO.updateParking(parkingSpot);
 			fareCalculatorService.calculateFare(ticket);
 			
 			double newPrice = ticket.getPrice();
+			
+			String str = df.format(newPrice);
+			newPrice = Double.parseDouble(str.replace(',', '.')); //Reduit la decimal de newPrice a deux chiffre aprés la virgule
+			
 			System.out.println("Avant 5%" + newPrice);
 
-
+			//verifie si un ancien ticket existe 
 			if (oldTicket != null && ticket != null && oldTicket.getOutTime() != null && ticket.getOutTime() != null && oldTicket.getOutTime().getTime() != ticket.getOutTime().getTime()) {
 				newPrice = newPrice * 0.95;
+				
+				
+				str = df.format(newPrice);
+				newPrice = Double.parseDouble(str.replace(',', '.')); //Reduit la decimal de newPrice deux chiffre aprés la virgule
+				
 				ticket.setPrice(newPrice);
 				System.out.println("Aprés 5%" + newPrice);
 			}
+			
+			ticketDAO.updateTicket(ticket);
 			
 			System.out.println("Please pay the parking fare:" + ticket.getPrice());
 			System.out
 					.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
 
-			ticketDAO.updateTicket(ticket);
+			
 
 		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);

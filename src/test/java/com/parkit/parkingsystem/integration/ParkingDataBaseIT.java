@@ -70,25 +70,33 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() {
-		testParkingACar();
+		//testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingService.processIncomingVehicle();
+		
+		Ticket ticket = ticketDAO.getTicket("ABCDEF");
+		Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 3 * 60 * 60 * 1000) );
+		ticket.setInTime(inTime);
+        ticketDAO.updateInTime(ticket);
+        
 		parkingService.processExitingVehicle();
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
-		Ticket ticket = ticketDAO.getTicket("ABCDEF");
+		ticket = ticketDAO.getTicket("ABCDEF");
 		assertNotEquals(null, ticket.getPrice());
-		
 		assertNotEquals(null, ticket.getOutTime());
 	}
 
 	
 	@Test
+	
 	public void testParkingLotExitTwoTime() {
 		Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 3 * 60 * 60 * 1000) );
         
 		Date inTime2 = new Date();
-        inTime2.setTime( System.currentTimeMillis() - ( 2 * 60 * 60 * 1000) );
+        inTime2.setTime( System.currentTimeMillis() - ( 3 * 60 * 60 * 1000) );
         
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         
@@ -103,19 +111,8 @@ public class ParkingDataBaseIT {
         ticket2.setInTime(inTime2);
         ticketDAO.updateInTime(ticket2);
         parkingService.processExitingVehicle();
-		
-	
-        /*
-		testParkingACar();
-		Ticket ticket = ticketDAO.getTicket("ABCDEF");
-        ticket.setInTime(inTime);
-		fareCalculatorService.calculateFare(ticket);
-		double beforeDiscountPrice = ticket.getPrice();
-		double afterDiscountPrice = beforeDiscountPrice; //(beforeDiscountPrice - ((beforeDiscountPrice * 5) / 100));
-		parkingService.processExitingVehicle();
-		testParkingLotExit();
-
-		assertEquals(afterDiscountPrice, ticket.getPrice());¨*/
+        
+        
 
 	}
 }
