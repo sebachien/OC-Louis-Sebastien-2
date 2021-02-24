@@ -19,6 +19,8 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+    private DataBaseConfig dataBaseConfig2 = dataBaseConfig;
+
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
         try {
@@ -35,7 +37,7 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
-            dataBaseConfig.closeConnection(con);
+            dataBaseConfig2.closeConnection(con);
             return false;
         }
     }
@@ -68,6 +70,30 @@ public class TicketDAO {
             return ticket;
         }
     }
+    
+    public Ticket getOldTicket(String vehicleRegNumber) {
+        Connection con = null;
+        Ticket ticket = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_OLD_TICKET);
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                ticket = new Ticket();
+                ticket.setVehicleRegNumber(vehicleRegNumber);
+                ticket.setOutTime(rs.getTimestamp(5));
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return ticket;
+        }
+    }
 
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
@@ -77,6 +103,23 @@ public class TicketDAO {
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3,ticket.getId());
+            ps.execute();
+            return true;
+        }catch (Exception ex){
+            logger.error("Error saving ticket info",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return false;
+    }
+    
+    public boolean updateInTime(Ticket ticket) {
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_IN_TIME);
+            ps.setTimestamp(1, new Timestamp(ticket.getInTime().getTime()));
+            ps.setInt(2,ticket.getId());
             ps.execute();
             return true;
         }catch (Exception ex){
