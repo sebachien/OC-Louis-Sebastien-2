@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>DataBasePrepareService.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (24 févr. 2021 09:11:58)</a> &gt; <a href="../../index.html" class="el_group">OC-Louis-Sebastien-2</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.integration.service</a> &gt; <span class="el_source">DataBasePrepareService.java</span></div><h1>DataBasePrepareService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.integration.service;
+
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+
+import java.sql.Connection;
+
+<span class="fc" id="L7">public class DataBasePrepareService {</span>
+
+<span class="fc" id="L9">    DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();</span>
+
+    public void clearDataBaseEntries(){
+<span class="fc" id="L12">        Connection connection = null;</span>
+        try{
+<span class="fc" id="L14">            connection = dataBaseTestConfig.getConnection();</span>
+
+            //set parking entries to available
+<span class="fc" id="L17">            connection.prepareStatement(&quot;update parking set available = true&quot;).execute();</span>
+
+            //clear ticket entries;
+<span class="fc" id="L20">            connection.prepareStatement(&quot;truncate table ticket&quot;).execute();</span>
+
+<span class="pc" id="L22">        }catch(Exception e){</span>
+<span class="nc" id="L23">            e.printStackTrace();</span>
+        }finally {
+<span class="fc" id="L25">            dataBaseTestConfig.closeConnection(connection);</span>
+        }
+<span class="fc" id="L27">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>java (24 févr. 2021 09:11:58)</div></body></html>
