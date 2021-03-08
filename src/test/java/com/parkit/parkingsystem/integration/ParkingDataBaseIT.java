@@ -90,7 +90,8 @@ public class ParkingDataBaseIT {
 
 	
 	@Test
-	//new (test la sortie d'un seul vehicule pour 
+	//new (test la sortie d'un seul vehicule pour 2 fois de plus test si la dexieme 
+	//fois le vehicule a 5% d'appliquer sur son ticket.
 	public void testParkingLotExitTwoTime() {
 		Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 3 * 60 * 60 * 1000) );
