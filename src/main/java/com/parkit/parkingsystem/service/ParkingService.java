@@ -133,7 +133,8 @@ public class ParkingService {
 				newPrice = Double.parseDouble(str.replace(',', '.')); //Reduit la decimal de newPrice deux chiffre aprés la virgule
 				
 				ticket.setPrice(newPrice);
-				//System.out.println("Aprés 5%" + newPrice);
+				
+				System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 			}
 			
 			ticketDAO.updateTicket(ticket);
