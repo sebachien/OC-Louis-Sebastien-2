@@ -90,7 +90,7 @@ public class ParkingDataBaseIT {
 
 	
 	@Test
-	
+	//new (test la sortie d'un seul vehicule pour 
 	public void testParkingLotExitTwoTime() {
 		Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - ( 3 * 60 * 60 * 1000) );
@@ -105,14 +105,16 @@ public class ParkingDataBaseIT {
         ticket.setInTime(inTime);
         ticketDAO.updateInTime(ticket);
         parkingService.processExitingVehicle();
+        double price1 = ticket.getPrice();
         
         parkingService.processIncomingVehicle();
         Ticket ticket2 = ticketDAO.getTicket("ABCDEF");
         ticket2.setInTime(inTime2);
         ticketDAO.updateInTime(ticket2);
         parkingService.processExitingVehicle();
+        double price2 = ticket2.getPrice();
         
-        
+        assertEquals(price2, price1*0.95);
 
 	}
 }

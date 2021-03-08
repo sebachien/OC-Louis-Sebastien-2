@@ -71,6 +71,7 @@ public class TicketDAO {
         }
     }
     
+    //new (utilisé pour voir s'il existe un ancien ticket lorsqu'un vehicul quitte le parking
     public Ticket getOldTicket(String vehicleRegNumber) {
         Connection con = null;
         Ticket ticket = null;
@@ -113,6 +114,7 @@ public class TicketDAO {
         return false;
     }
     
+    //new (permet d'enregistrer une date d'entré sur le ticket)
     public boolean updateInTime(Ticket ticket) {
         Connection con = null;
         try {

@@ -18,18 +18,21 @@ public class FareCalculatorService {
 		double diff = ticket.getOutTime().getTime() - ticket.getInTime().getTime();
 		double diffHours = (((diff / 1000) / 60) / 60);
 		
+		
 		DecimalFormat df = new DecimalFormat("########.00");
 		String str = df.format(diffHours);
 		diffHours = Double.parseDouble(str.replace(',', '.'));
 		
 		// TODO: Some tests are failing here. Need to check if this logic is correct
 
-		System.out.println("You have been parked : " + diffHours + " Hours");
+		//System.out.println("You have been parked : " + diffHours + " Hours");
 		
 		//30 min free
 		if (diffHours > 0.5) {
 		diffHours -= 0.5;
-		System.out.println("You have been parked more than 30 min, you have pay juste for : " + diffHours + " Hours");
+		
+		//System.out.println("You have been parked more than 30 min, you have pay juste for : " + diffHours + " Hours");
+		
 		} 
 		
 

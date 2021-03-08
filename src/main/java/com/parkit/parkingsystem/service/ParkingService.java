@@ -103,7 +103,6 @@ public class ParkingService {
 		try {
 			String vehicleRegNumber = getVehichleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-			System.out.println("ticket:" + ticket.getInTime());
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
 
@@ -123,7 +122,7 @@ public class ParkingService {
 			String str = df.format(newPrice);
 			newPrice = Double.parseDouble(str.replace(',', '.')); //Reduit la decimal de newPrice a deux chiffre aprés la virgule
 			
-			System.out.println("Avant 5%" + newPrice);
+			//System.out.println("Avant 5%" + newPrice);
 
 			//verifie si un ancien ticket existe 
 			if (oldTicket != null && ticket != null && oldTicket.getOutTime() != null && ticket.getOutTime() != null && oldTicket.getOutTime().getTime() != ticket.getOutTime().getTime()) {
@@ -134,7 +133,7 @@ public class ParkingService {
 				newPrice = Double.parseDouble(str.replace(',', '.')); //Reduit la decimal de newPrice deux chiffre aprés la virgule
 				
 				ticket.setPrice(newPrice);
-				System.out.println("Aprés 5%" + newPrice);
+				//System.out.println("Aprés 5%" + newPrice);
 			}
 			
 			ticketDAO.updateTicket(ticket);
